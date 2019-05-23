@@ -44,7 +44,7 @@ class CsvReaderPlugin extends AbstractPlugin
         }
         $this->csvReaderConfig = $csvReaderConfig;
         if ($csvReaderConfig->getIncludePath() == null) {
-            if (defined(RES_DIR)) {
+            if (defined("RES_DIR")) {
                 $csvReaderConfig->setIncludePath(RES_DIR . "/csv");
             }
         }
@@ -59,10 +59,8 @@ class CsvReaderPlugin extends AbstractPlugin
     public function beforeServerStart(Context $context)
     {
         $this->csvReaderConfig->merge();
-        if ($this->csvReaderConfig->getIncludePath() != null && is_dir($this->csvReaderConfig->getIncludePath())) {
-            $this->csvReader = new CsvReader($this->csvReaderConfig->getIncludePath());
-            $this->setToDIContainer(CsvReader::class, $this->csvReader);
-        }
+        $this->csvReader = new CsvReader($this->csvReaderConfig->getIncludePath());
+        $this->setToDIContainer(CsvReader::class, $this->csvReader);
     }
 
     /**

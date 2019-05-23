@@ -9,10 +9,13 @@
 namespace ESD\Plugins\CsvReader;
 
 
+use ESD\BaseServer\Plugins\Logger\GetLogger;
+
 class CsvReader
 {
-    public $json;
-    public $all;
+    use GetLogger;
+    public $json = [];
+    public $all = [];
     /**
      * @var Random[]
      */
@@ -28,6 +31,9 @@ class CsvReader
      */
     public function __construct($dir)
     {
+        if (!is_dir($dir)) {
+            return;
+        }
         $files = scandir($dir);
         foreach ($files as $file) {
             if ($file != '.' && $file != '..' && $this->get_extension($file) == "csv") {
@@ -55,6 +61,7 @@ class CsvReader
     {
         $file = file_get_contents($path);
         $name = basename($path, ".json");
+        $this->debug("Add $name json");
         $this->json[$name] = json_decode($file, true);
     }
 
@@ -65,6 +72,7 @@ class CsvReader
     {
         $file = fopen($path, 'r');
         $name = basename($path, ".csv");
+        $this->debug("Add $name csv");
         $lineNum = 0;
         $keys = null;
         while ($line = fgetcsv($file)) {
@@ -85,12 +93,24 @@ class CsvReader
                     $map[$keys[$key]] = $value;
                 }
             }
-            $this->all[$name][$map['id']] = $map;
-            if (!array_key_exists('id', $map)) {
-                var_dump($name);
+            if(array_key_exists("id",$map)){
+                $this->all[$name][$map['id']] = $map;
+            }else{
+                $this->all[$name][] = $map;
             }
+
         }
         fclose($file);
+    }
+
+    /**
+     * @param $csv_name
+     * @return array
+     */
+    public function getCsv($csv_name)
+    {
+        $data = $this->all[$csv_name];
+        return $data;
     }
 
     /**
@@ -98,7 +118,7 @@ class CsvReader
      * @param $fuc
      * @return array
      */
-    public function search($csv_name, $fuc)
+    public function searchCsv($csv_name, $fuc)
     {
         $data = $this->all[$csv_name];
         $result = [];
@@ -116,7 +136,7 @@ class CsvReader
      * @return bool
      * @throws \Exception
      */
-    public function searchOne($csv_name, $fuc)
+    public function searchOneCsv($csv_name, $fuc)
     {
         $data = $this->all[$csv_name];
         foreach ($data as $value) {
@@ -131,7 +151,7 @@ class CsvReader
      * @param $key
      * @return array
      */
-    public function groupBy($csv_name, $key)
+    public function groupByCsv($csv_name, $key)
     {
         $data = $this->all[$csv_name];
         $types = [];
@@ -151,7 +171,7 @@ class CsvReader
      * @param $fuc
      * @return mixed
      */
-    public function random($csv_name, $fuc)
+    public function randomCsv($csv_name, $fuc)
     {
         $data = $this->all[$csv_name];
         if ($fuc == null) {
