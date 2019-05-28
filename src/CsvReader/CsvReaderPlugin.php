@@ -8,8 +8,9 @@
 
 namespace ESD\Plugins\CsvReader;
 
-use ESD\BaseServer\Server\Context;
-use ESD\BaseServer\Server\PlugIn\AbstractPlugin;
+
+use ESD\Core\Context\Context;
+use ESD\Core\PlugIn\AbstractPlugin;
 
 class CsvReaderPlugin extends AbstractPlugin
 {
@@ -35,6 +36,7 @@ class CsvReaderPlugin extends AbstractPlugin
      * @param CsvReaderConfig|null $csvReaderConfig
      * @throws \DI\DependencyException
      * @throws \ReflectionException
+     * @throws \DI\NotFoundException
      */
     public function __construct(?CsvReaderConfig $csvReaderConfig = null)
     {
@@ -54,7 +56,10 @@ class CsvReaderPlugin extends AbstractPlugin
      * 初始化
      * @param Context $context
      * @return mixed
-     * @throws \ESD\BaseServer\Server\Exception\ConfigException
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
+     * @throws \ESD\Core\Plugins\Config\ConfigException
+     * @throws \Exception
      */
     public function beforeServerStart(Context $context)
     {

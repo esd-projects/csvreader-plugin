@@ -9,7 +9,7 @@
 namespace ESD\Plugins\CsvReader;
 
 
-use ESD\BaseServer\Exception;
+use ESD\Core\Exception;
 
 class CsvReaderException extends Exception
 {

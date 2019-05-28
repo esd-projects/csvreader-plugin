@@ -8,8 +8,7 @@
 
 namespace ESD\Plugins\CsvReader;
 
-
-use ESD\BaseServer\Plugins\Logger\GetLogger;
+use ESD\Core\Plugins\Logger\GetLogger;
 
 class CsvReader
 {
@@ -28,6 +27,8 @@ class CsvReader
     /**
      * CsvReader constructor.
      * @param $dir
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     public function __construct($dir)
     {
@@ -56,6 +57,8 @@ class CsvReader
 
     /**
      * @param $path
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function readJson($path)
     {
@@ -67,6 +70,8 @@ class CsvReader
 
     /**
      * @param $path
+     * @throws \DI\DependencyException
+     * @throws \DI\NotFoundException
      */
     protected function read($path)
     {
@@ -135,6 +140,7 @@ class CsvReader
      * @param $fuc
      * @return bool
      * @throws \Exception
+     * @throws CsvReaderException
      */
     public function searchOneCsv($csv_name, $fuc)
     {

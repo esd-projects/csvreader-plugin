@@ -8,8 +8,7 @@
 
 namespace ESD\Plugins\CsvReader;
 
-
-use ESD\BaseServer\Plugins\Config\BaseConfig;
+use ESD\Core\Plugins\Config\BaseConfig;
 
 class CsvReaderConfig extends BaseConfig
 {
